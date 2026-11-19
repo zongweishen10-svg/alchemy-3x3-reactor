@@ -1,0 +1,66 @@
+name: Assemble binaries and deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-assemble
+  cancel-in-progress: false
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode binaries from base64 chunks
+        run: python3 scripts/decode_binaries.py
+      - name: Commit binaries and remove chunks
+        run: |
+          if [ -d chunks ]; then
+            rm -rf chunks
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Assemble binary web assets and remove base64 chunks"
+            git push
+          fi
+
+  deploy:
+    needs: assemble
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Stage only site files
+        run: |
+          mkdir -p _site
+          for f in index.html index.js index.wasm index.pck index.png index.icon.png index.apple-touch-icon.png index.audio.worklet.js index.audio.position.worklet.js .nojekyll; do
+            if [ -f "$f" ]; then
+              cp -a "$f" _site/
+            else
+              echo "WARNING: missing $f"
+            fi
+          done
+          ls -lah _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
