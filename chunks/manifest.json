@@ -1,0 +1,32 @@
+[
+  {
+    "name": "index.wasm",
+    "size": 39514754,
+    "sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+    "chunks": 44
+  },
+  {
+    "name": "index.pck",
+    "size": 236972,
+    "sha256": "b662c45ca9e27d2ac25826155fe166660592309a59d60776421d97afb0b889d3",
+    "chunks": 1
+  },
+  {
+    "name": "index.png",
+    "size": 21443,
+    "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+    "chunks": 1
+  },
+  {
+    "name": "index.icon.png",
+    "size": 5700,
+    "sha256": "ad3c35ad0facf487c618204bd98db543034fc95224eadc7f08c7a9ff38d5b3b5",
+    "chunks": 1
+  },
+  {
+    "name": "index.apple-touch-icon.png",
+    "size": 11944,
+    "sha256": "01d4f63e525941e06ce74f5187dad030d20a8d52a07ce365ae4e94af97a3b1f5",
+    "chunks": 1
+  }
+]
