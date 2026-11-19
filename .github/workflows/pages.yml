@@ -23,7 +23,7 @@ jobs:
         run: python3 scripts/decode_binaries.py
       - name: Assemble subfolder builds (slime/)
         run: |
-          for d in slime; do
+          for d in slime/v1 slime; do
             if [ -d "$d" ]; then python3 scripts/assemble_sub.py "$d"; fi
           done
       - name: Commit binaries and remove chunks
@@ -62,7 +62,7 @@ jobs:
               echo "WARNING: missing $f"
             fi
           done
-          for d in slime; do
+          for d in slime/v1 slime; do
             if [ -d "$d" ]; then
               mkdir -p "_site/$d"
               cp -a "$d"/index.* "_site/$d/"
