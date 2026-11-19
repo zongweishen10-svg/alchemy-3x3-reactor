@@ -21,6 +21,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Decode binaries from base64 chunks
         run: python3 scripts/decode_binaries.py
+      - name: Assemble subfolder builds (slime/)
+        run: |
+          for d in slime; do
+            if [ -d "$d" ]; then python3 scripts/assemble_sub.py "$d"; fi
+          done
       - name: Commit binaries and remove chunks
         run: |
           if [ -d chunks ]; then
@@ -57,7 +62,13 @@ jobs:
               echo "WARNING: missing $f"
             fi
           done
-          ls -lah _site
+          for d in slime; do
+            if [ -d "$d" ]; then
+              mkdir -p "_site/$d"
+              cp -a "$d"/index.* "_site/$d/"
+            fi
+          done
+          ls -lahR _site
       - uses: actions/configure-pages@v5
         with:
           enablement: true
